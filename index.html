@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arbeidskrav i Javascript og API</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Du trenger ikke røre denne HTML-koden for å løse oppgavene. -->
+    <div class="game-container">
+      <!-- Oppgave 1 1: Lag karakter -->
+      <div id="character-creator" class="section">
+        <h1>Lag din helt</h1>
+        <label for="character-name">Navn:</label>
+        <input type="text" id="character-name" placeholder="Velg et navn" />
+
+        <label for="character-hp">HP:</label>
+        <input type="number" id="character-hp" />
+
+        <label for="attack-damage">Angrepsstyrke:</label>
+        <input type="number" id="attack-damage" />
+
+        <h3>Velg ditt profilbilde:</h3>
+        <div class="profile-pics">
+          <img
+            src="assets/death-knight.jpeg"
+            class="profile-img"
+            alt="Bilde 1"
+          />
+          <img src="assets/hunter.jpg" class="profile-img" alt="Bilde 2" />
+          <img src="assets/mage.webp" class="profile-img" alt="Bilde 3" />
+        </div>
+
+        <button id="create-character">Lag karakter</button>
+      </div>
+
+      <!-- Oppgave 2: Generer fiende -->
+      <div id="enemy-creator" class="section">
+        <h1>Generer fiende</h1>
+        <button id="generate-enemy">Generer fiende</button>
+        <div id="enemy-display">
+          <img id="enemy-img" class="profile-img" />
+          <p id="enemy-name"></p>
+          <p id="enemy-hp"></p>
+          <p id="enemy-attack"></p>
+        </div>
+      </div>
+
+      <!-- Seksjon 3: Sloss -->
+      <div id="battle-area" class="section">
+        <h1>Sloss!</h1>
+
+        <!-- Slik skal fremvisning av helten se ut. Du skal lage disse taggene og denne strukturen i Javascript. 
+        <div id="character-display" class="profile-card">
+          <h2>Helten</h2>
+          <img id="char-img" alt="Profilbilde" />
+          <p id="char-name"></p>
+          <p id="char-hp"></p>
+          <p id="char-attack"></p>
+        </div>
+        -->
+        <!-- Slik skal fremvisning av fienden se ut. Du skal lage disse taggene og denne strukturen i Javascript.
+        <div id="enemy-fight-display" class="profile-card">
+          <h2>Fiende</h2>
+          <img id="enemy-fight-img" alt="Fiendens profilbilde" />
+          <p id="enemy-fight-name"></p>
+          <p id="enemy-fight-hp"></p>
+          <p id="enemy-fight-attack"></p>
+        </div>
+      -->
+        <button id="start-fight">Start kamp</button>
+        <p id="battle-result"></p>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

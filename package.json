@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "parcel index.html",
+    "start": "live-server",
     "test": "jest"
   },
   "keywords": [],
@@ -15,6 +15,6 @@
   "description": "",
   "devDependencies": {
     "jest": "^29.7.0",
-    "parcel": "^2.13.3"
+    "live-server": "^1.2.2"
   }
 }

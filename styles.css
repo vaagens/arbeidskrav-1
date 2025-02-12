@@ -109,3 +109,9 @@ input[type="range"] {
   margin-top: 20px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
+
+.selected {
+  border: 2px solid #3498db;
+  transform: scale(1.05);    
+  transition: transform 0.2s, border 0.2s;
+}

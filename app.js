@@ -1,7 +1,9 @@
-//---Del 1: Lag karakter og lagre karakteren i localStorage------------------------------------------------------------------------
-
+let character = null;
+let enemy = null;
 let selectedImage = null;
-let fightResult;
+let fightResult = null;
+
+//---Del 1: Lag karakter og lagre karakteren i localStorage------------------------------------------------------------------------
 
 class Character {
   constructor(
@@ -45,34 +47,6 @@ function createCharacter() {
   localStorage.setItem("character", JSON.stringify(character));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  setupCharacterImageSelection();
-  displayArenaFighter("character")
-  displayArenaFighter("enemy-fight")
-  resetFightButton();
-  document
-    .getElementById("create-character")
-    .addEventListener("click", function () {
-      createCharacter();
-      displayArenaFighter("character");
-      displayArenaFighter("enemy-fight");
-      resetFightButton();
-      resetResult();
-    });
-  document
-    .getElementById("generate-enemy")
-    .addEventListener("click", function () {
-      enemy = createEnemy();
-      displayCreatedEnemy(enemy);
-      displayArenaFighter("enemy-fight");
-      resetFightButton();
-      resetResult();
-    });
-  document
-    .getElementById("start-fight")
-    .addEventListener("click", calculateWinner);
-});
-
 //---Seksjon 2: Generer fiende------------------------------------------------------------------------------------------------------
 
 class Enemy {
@@ -112,6 +86,7 @@ function displayCreatedEnemy(enemy) {
 //---Seksjon 3: Sloss!-------------------------------------------------------------------------------------------------------------
 //Du skal vise frem helten og fienden. Se HTML-dokumentet for hvordan fremvisningen skal se ut, med tanke på hvilke tagger, hierarki og hvilke klasser de skal ha.
 //Du skal lage den strukturen som vist i HTML, her i Javascript og legge de til i div'en "battle-arena" fra HTML.
+
 const battleArea = document.getElementById("battle-area");
 
 function displayArenaFighter(fighter) {
@@ -131,18 +106,10 @@ function displayArenaFighter(fighter) {
   fighterCard.className = "profile-card";
 
   const fighterHeading = document.createElement("h2");
-  
+
   const fighterImg = document.createElement("img");
   fighterImg.src = storedFighter.image;
   fighterImg.id = `${fighter}-img`;
-
-  if (fighter === "character") {
-    fighterHeading.innerText = "Helten";
-    fighterImg.alt = "Profilbilde";
-  } else {
-    fighterHeading.innerText = "Fiende";
-    fighterImg.alt = "Fiendens profilbilde";
-  }
 
   const fighterName = document.createElement("p");
   fighterName.innerText = `Navn: ${storedFighter.name}`;
@@ -156,13 +123,29 @@ function displayArenaFighter(fighter) {
   fighterAttack.innerText = `Angrepsstyrke: ${storedFighter.damage}`;
   fighterAttack.id = `${fighter}-attack`;
 
-  fighterCard.append(fighterHeading, fighterImg, fighterName, fighterHp, fighterAttack);
+  if (fighter === "character") {
+    character = storedFighter;
+    fighterHeading.innerText = "Helten";
+    fighterImg.alt = "Profilbilde";
+  } else {
+    enemy = storedFighter;
+    fighterHeading.innerText = "Fiende";
+    fighterImg.alt = "Fiendens profilbilde";
+  }
+
+  fighterCard.append(
+    fighterHeading,
+    fighterImg,
+    fighterName,
+    fighterHp,
+    fighterAttack
+  );
   battleArea.appendChild(fighterCard);
 }
 
 function calculateWinner() {
-  let charHpAfterFight = storedCharacter.hp - storedEnemy.damage;
-  let enemyHpAfterFight = storedEnemy.hp - storedCharacter.damage;
+  let charHpAfterFight = character.hp - enemy.damage;
+  let enemyHpAfterFight = enemy.hp - character.damage;
 
   if (charHpAfterFight > enemyHpAfterFight) {
     battleResult = "Du vant!";
@@ -188,3 +171,31 @@ function resetResult() {
     battleArea.appendChild(fightResult);
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupCharacterImageSelection();
+  displayArenaFighter("character");
+  displayArenaFighter("enemy-fight");
+  resetFightButton();
+  document
+    .getElementById("create-character")
+    .addEventListener("click", function () {
+      createCharacter();
+      displayArenaFighter("character");
+      displayArenaFighter("enemy-fight");
+      resetFightButton();
+      resetResult();
+    });
+  document
+    .getElementById("generate-enemy")
+    .addEventListener("click", function () {
+      enemy = createEnemy();
+      displayCreatedEnemy(enemy);
+      displayArenaFighter("enemy-fight");
+      resetFightButton();
+      resetResult();
+    });
+  document
+    .getElementById("start-fight")
+    .addEventListener("click", calculateWinner);
+});

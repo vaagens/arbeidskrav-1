@@ -1,7 +1,6 @@
 let character = null;
 let enemy = null;
 let selectedImage = null;
-let fightResult = null;
 
 //---Del 1: Lag karakter og lagre karakteren i localStorage------------------------------------------------------------------------
 
@@ -32,17 +31,19 @@ function setupCharacterImageSelection() {
   });
 }
 
-function createCharacter() {
+function createCharacter(injectedImage) {
   const nameInput = document.getElementById("character-name").value;
   const hpInput = parseInt(document.getElementById("character-hp").value);
   const attackInput = parseInt(document.getElementById("attack-damage").value);
 
-  if (!nameInput || isNaN(hpInput) || isNaN(attackInput) || !selectedImage) {
+  const imageToUse = injectedImage || selectedImage;
+
+  if (!nameInput || isNaN(hpInput) || isNaN(attackInput) || !imageToUse) {
     alert("Vennligst fyll ut alle feltene og velg et profilbilde!");
     return;
   }
 
-  character = new Character(nameInput, hpInput, attackInput, selectedImage);
+  character = new Character(nameInput, hpInput, attackInput, imageToUse);
 
   localStorage.setItem("character", JSON.stringify(character));
 }
@@ -77,19 +78,17 @@ function createEnemy() {
 
 function displayCreatedEnemy(enemy) {
   document.getElementById("enemy-img").src = enemy.image;
-  document.getElementById("enemy-name").textContent = "Fiende: " + enemy.name;
-  document.getElementById("enemy-hp").textContent = "HP: " + enemy.hp;
-  document.getElementById("enemy-attack").textContent =
-    "Angrepsstyrke: " + enemy.damage;
+  document.getElementById("enemy-name").textContent = `Fiende: ${enemy.name}`;
+  document.getElementById("enemy-hp").textContent = `HP: ${enemy.hp}`;
+  document.getElementById("enemy-attack").textContent = `Angrepsstyrke: ${enemy.damage}`;
 }
 
 //---Seksjon 3: Sloss!-------------------------------------------------------------------------------------------------------------
 //Du skal vise frem helten og fienden. Se HTML-dokumentet for hvordan fremvisningen skal se ut, med tanke på hvilke tagger, hierarki og hvilke klasser de skal ha.
 //Du skal lage den strukturen som vist i HTML, her i Javascript og legge de til i div'en "battle-arena" fra HTML.
 
-const battleArea = document.getElementById("battle-area");
-
 function displayArenaFighter(fighter) {
+  const battleArea = document.getElementById("battle-area");
   const storedFighter = JSON.parse(localStorage.getItem(fighter));
 
   if (!storedFighter) {
@@ -143,29 +142,35 @@ function displayArenaFighter(fighter) {
   battleArea.appendChild(fighterCard);
 }
 
-function calculateWinner() {
-  let charHpAfterFight = character.hp - enemy.damage;
-  let enemyHpAfterFight = enemy.hp - character.damage;
+function calculateWinner(player, monster) {
+  const playerHpAfterFight = player.hp - monster.damage;
+  const monsterHpAfterFight = monster.hp - player.damage;
 
-  if (charHpAfterFight > enemyHpAfterFight) {
-    battleResult = "Du vant!";
-  } else if (enemyHpAfterFight > charHpAfterFight) {
-    battleResult = "Du tapte!";
+  if (playerHpAfterFight > monsterHpAfterFight) {
+    return "Du vant!";
+  } else if (monsterHpAfterFight > playerHpAfterFight) {
+    return "Du tapte!";
   } else {
-    battleResult = "Uavgjort!";
+    return "Uavgjort!";
   }
+}
 
-  fightResult = document.getElementById("battle-result");
-  fightResult.innerText = battleResult;
+function updateFightResult(result) {
+  const battleArea = document.getElementById("battle-area");
+  const fightResult = document.getElementById("battle-result");
+  fightResult.innerText = result;
   battleArea.appendChild(fightResult);
 }
 
 function resetFightButton() {
+  const battleArea = document.getElementById("battle-area");
   const fightButton = document.getElementById("start-fight");
   battleArea.appendChild(fightButton);
 }
 
 function resetResult() {
+  const battleArea = document.getElementById("battle-area");
+  const fightResult = document.getElementById("battle-result");
   if (fightResult) {
     fightResult.innerText = "";
     battleArea.appendChild(fightResult);
@@ -179,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
   resetFightButton();
   document
     .getElementById("create-character")
-    .addEventListener("click", function () {
+    .addEventListener("click", () => {
       createCharacter();
       displayArenaFighter("character");
       displayArenaFighter("enemy-fight");
@@ -188,14 +193,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   document
     .getElementById("generate-enemy")
-    .addEventListener("click", function () {
+    .addEventListener("click", () => {
       enemy = createEnemy();
       displayCreatedEnemy(enemy);
       displayArenaFighter("enemy-fight");
       resetFightButton();
       resetResult();
     });
-  document
-    .getElementById("start-fight")
-    .addEventListener("click", calculateWinner);
+  document.getElementById("start-fight").addEventListener("click", () => {
+    const result = calculateWinner(character, enemy);
+    updateFightResult(result);
+  });
 });
+
+if (typeof module !== "undefined") {
+  module.exports = { createCharacter, createEnemy, calculateWinner };
+}

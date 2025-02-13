@@ -1,4 +1,4 @@
-// Del 1: Lag karakter og lagre karakteren i localStorage
+//---Del 1: Lag karakter og lagre karakteren i localStorage------------------------------------------------------------------------
 
 let selectedImage = null;
 let fightResult;
@@ -47,15 +47,15 @@ function createCharacter() {
 
 document.addEventListener("DOMContentLoaded", () => {
   setupCharacterImageSelection();
-  displayFightingCharacter();
-  displayFightingEnemy();
+  displayArenaFighter("character")
+  displayArenaFighter("enemy-fight")
   resetFightButton();
   document
     .getElementById("create-character")
     .addEventListener("click", function () {
       createCharacter();
-      displayFightingCharacter();
-      displayFightingEnemy();
+      displayArenaFighter("character");
+      displayArenaFighter("enemy-fight");
       resetFightButton();
       resetResult();
     });
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", function () {
       enemy = createEnemy();
       displayCreatedEnemy(enemy);
-      displayFightingEnemy();
+      displayArenaFighter("enemy-fight");
       resetFightButton();
       resetResult();
     });
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", calculateWinner);
 });
 
-//Seksjon 2: Generer fiende
+//---Seksjon 2: Generer fiende------------------------------------------------------------------------------------------------------
 
 class Enemy {
   constructor(enemyName, enemyHp, enemyAttackDamage, enemyImage) {
@@ -109,14 +109,13 @@ function displayCreatedEnemy(enemy) {
     "Angrepsstyrke: " + enemy.damage;
 }
 
-// Seksjon 3: Sloss!
+//---Seksjon 3: Sloss!-------------------------------------------------------------------------------------------------------------
 //Du skal vise frem helten og fienden. Se HTML-dokumentet for hvordan fremvisningen skal se ut, med tanke på hvilke tagger, hierarki og hvilke klasser de skal ha.
 //Du skal lage den strukturen som vist i HTML, her i Javascript og legge de til i div'en "battle-arena" fra HTML.
 const battleArea = document.getElementById("battle-area");
 
-//Helt
 function displayArenaFighter(fighter) {
-  storedFighter = JSON.parse(localStorage.getItem(fighter));
+  const storedFighter = JSON.parse(localStorage.getItem(fighter));
 
   if (!storedFighter) {
     return;
@@ -132,6 +131,11 @@ function displayArenaFighter(fighter) {
   fighterCard.className = "profile-card";
 
   const fighterHeading = document.createElement("h2");
+  
+  const fighterImg = document.createElement("img");
+  fighterImg.src = storedFighter.image;
+  fighterImg.id = `${fighter}-img`;
+
   if (fighter === "character") {
     fighterHeading.innerText = "Helten";
     fighterImg.alt = "Profilbilde";
@@ -140,111 +144,20 @@ function displayArenaFighter(fighter) {
     fighterImg.alt = "Fiendens profilbilde";
   }
 
-  const fighterImg = document.createElement("img");
-  fighterImg.src = storedFighter.image;
-  fighterImg.id = `${fighter}-img`;
-
-
   const fighterName = document.createElement("p");
   fighterName.innerText = `Navn: ${storedFighter.name}`;
-  charName.id = `${fighter}-name`;
+  fighterName.id = `${fighter}-name`;
 
   const fighterHp = document.createElement("p");
   fighterHp.innerText = `HP: ${storedFighter.hp}`;
   fighterHp.id = `${fighter}-hp`;
 
   const fighterAttack = document.createElement("p");
-  charAttack.innerText = "Angrepsstyrke: " + storedCharacter.damage;
-  charAttack.id = "char-attack";
+  fighterAttack.innerText = `Angrepsstyrke: ${storedFighter.damage}`;
+  fighterAttack.id = `${fighter}-attack`;
 
-  characterCard.append(characterHeading, charImg, charName, charHp, charAttack);
-  battleArea.appendChild(characterCard);
-}
-
-function displayFightingCharacter() {
-  storedCharacter = JSON.parse(localStorage.getItem("character"));
-
-  if (!storedCharacter) {
-    return;
-  } else {
-    const existingCharacterCard = document.getElementById("character-display");
-    if (existingCharacterCard) {
-      existingCharacterCard.remove();
-    }
-
-    const characterCard = document.createElement("div");
-    characterCard.id = "character-display";
-    characterCard.className = "profile-card";
-
-    const characterHeading = document.createElement("h2");
-    characterHeading.innerText = "Helten";
-
-    const charImg = document.createElement("img");
-    charImg.src = storedCharacter.image;
-    charImg.id = "char-img";
-    charImg.alt = "Profilbilde";
-
-    const charName = document.createElement("p");
-    charName.innerText = "Navn: " + storedCharacter.name;
-    charName.id = "char-name";
-
-    const charHp = document.createElement("p");
-    charHp.innerText = "HP: " + storedCharacter.hp;
-    charHp.id = "char-hp";
-
-    const charAttack = document.createElement("p");
-    charAttack.innerText = "Angrepsstyrke: " + storedCharacter.damage;
-    charAttack.id = "char-attack";
-
-    characterCard.append(
-      characterHeading,
-      charImg,
-      charName,
-      charHp,
-      charAttack
-    );
-    battleArea.appendChild(characterCard);
-  }
-}
-
-// Fiende
-function displayFightingEnemy() {
-  storedEnemy = JSON.parse(localStorage.getItem("enemy"));
-  if (!storedEnemy) {
-    return;
-  } else {
-    const existingEnemyCard = document.getElementById("enemy-fight-display");
-    if (existingEnemyCard) {
-      existingEnemyCard.remove();
-    }
-
-    const enemyCard = document.createElement("div");
-    enemyCard.id = "enemy-fight-display";
-    enemyCard.className = "profile-card";
-
-    const enemyHeading = document.createElement("h2");
-    enemyHeading.innerText = "Fiende";
-
-    const enemyImg = document.createElement("img");
-    enemyImg.src = storedEnemy.image;
-    enemyImg.id = "enemy-fight-img";
-    enemyImg.alt = "Fiendens profilbilde";
-
-    const enemyName = document.createElement("p");
-    enemyName.innerText = "Navn: " + storedEnemy.name;
-    enemyName.id = "enemy-fight-name";
-
-    const enemyHp = document.createElement("p");
-    enemyHp.innerText = "HP: " + storedEnemy.hp;
-    enemyHp.id = "enemy-fight-hp";
-
-    const enemyAttack = document.createElement("p");
-    enemyAttack.innerText = "Angrepsstyrke: " + storedEnemy.damage;
-    enemyAttack.id = "enemy-fight-attack";
-
-    enemyCard.append(enemyHeading, enemyImg, enemyName, enemyHp, enemyAttack);
-    battleArea.appendChild(enemyCard);
-  }
+  fighterCard.append(fighterHeading, fighterImg, fighterName, fighterHp, fighterAttack);
+  battleArea.appendChild(fighterCard);
 }
 
 function calculateWinner() {

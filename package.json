@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
+  "dependencies": {
     "jest": "^29.7.0",
     "live-server": "^1.2.2"
   }

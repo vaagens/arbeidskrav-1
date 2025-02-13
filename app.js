@@ -96,7 +96,7 @@ function createEnemy() {
 
   enemy = new Enemy(randomName, randomHp, randomAttackDamage, randomImage);
 
-  localStorage.setItem("enemy", JSON.stringify(enemy));
+  localStorage.setItem("enemy-fight", JSON.stringify(enemy));
 
   return enemy;
 }
@@ -115,6 +115,52 @@ function displayCreatedEnemy(enemy) {
 const battleArea = document.getElementById("battle-area");
 
 //Helt
+function displayArenaFighter(fighter) {
+  storedFighter = JSON.parse(localStorage.getItem(fighter));
+
+  if (!storedFighter) {
+    return;
+  } else {
+    const existingFighterCard = document.getElementById(`${fighter}-display`);
+    if (existingFighterCard) {
+      existingFighterCard.remove();
+    }
+  }
+
+  const fighterCard = document.createElement("div");
+  fighterCard.id = `${fighter}-display`;
+  fighterCard.className = "profile-card";
+
+  const fighterHeading = document.createElement("h2");
+  if (fighter === "character") {
+    fighterHeading.innerText = "Helten";
+    fighterImg.alt = "Profilbilde";
+  } else {
+    fighterHeading.innerText = "Fiende";
+    fighterImg.alt = "Fiendens profilbilde";
+  }
+
+  const fighterImg = document.createElement("img");
+  fighterImg.src = storedFighter.image;
+  fighterImg.id = `${fighter}-img`;
+
+
+  const fighterName = document.createElement("p");
+  fighterName.innerText = `Navn: ${storedFighter.name}`;
+  charName.id = `${fighter}-name`;
+
+  const fighterHp = document.createElement("p");
+  fighterHp.innerText = `HP: ${storedFighter.hp}`;
+  fighterHp.id = `${fighter}-hp`;
+
+  const fighterAttack = document.createElement("p");
+  charAttack.innerText = "Angrepsstyrke: " + storedCharacter.damage;
+  charAttack.id = "char-attack";
+
+  characterCard.append(characterHeading, charImg, charName, charHp, charAttack);
+  battleArea.appendChild(characterCard);
+}
+
 function displayFightingCharacter() {
   storedCharacter = JSON.parse(localStorage.getItem("character"));
 

@@ -4,17 +4,17 @@ let selectedImage = null;
 
 //---Del 1: Lag karakter og lagre karakteren i localStorage------------------------------------------------------------------------
 
-class Character {
+class Fighter {
   constructor(
-    characterName,
-    characterHp,
-    characterAttackDamage,
-    characterImage
+    fighterName,
+    fighterHp,
+    fighterAttackDamage,
+    fighterImage
   ) {
-    this.name = characterName;
-    this.hp = characterHp;
-    this.damage = characterAttackDamage;
-    this.image = characterImage;
+    this.name = fighterName;
+    this.hp = fighterHp;
+    this.damage = fighterAttackDamage;
+    this.image = fighterImage;
   }
 }
 
@@ -43,21 +43,12 @@ function createCharacter(injectedImage) {
     return;
   }
 
-  character = new Character(nameInput, hpInput, attackInput, imageToUse);
+  character = new Fighter(nameInput, hpInput, attackInput, imageToUse);
 
   localStorage.setItem("character", JSON.stringify(character));
 }
 
 //---Seksjon 2: Generer fiende------------------------------------------------------------------------------------------------------
-
-class Enemy {
-  constructor(enemyName, enemyHp, enemyAttackDamage, enemyImage) {
-    this.name = enemyName;
-    this.hp = enemyHp;
-    this.damage = enemyAttackDamage;
-    this.image = enemyImage;
-  }
-}
 
 function createEnemy() {
   const randomName = ["Goblin", "Ork", "Drage"][Math.floor(Math.random() * 3)];
@@ -69,7 +60,7 @@ function createEnemy() {
     "/assets/dragon.jpg",
   ][Math.floor(Math.random() * 3)];
 
-  enemy = new Enemy(randomName, randomHp, randomAttackDamage, randomImage);
+  enemy = new Fighter(randomName, randomHp, randomAttackDamage, randomImage);
 
   localStorage.setItem("enemy-fight", JSON.stringify(enemy));
 
